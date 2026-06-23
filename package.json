@@ -6,8 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "seed:recipes": "bun run scripts/seed-recipes.ts",
-    "seed:user": "bun run scripts/seed-default-user.ts",
+    "seed:recipes": "node --env-file=.env --import tsx scripts/seed-recipes.ts",
+    "seed:user": "node --env-file=.env --import tsx scripts/seed-default-user.ts",
     "lint": "eslint"
   },
   "dependencies": {
