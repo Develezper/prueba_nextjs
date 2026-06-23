@@ -1,10 +1,13 @@
 "use client";
 
-import axios from "axios";
 import { Bookmark } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { getApiErrorMessage } from "@/src/lib/api-error";
+import {
+  addFavorite,
+  removeFavorite,
+} from "@/src/services/favorites.service";
 
 interface FavoriteButtonProps {
   recipeId: string;
@@ -12,11 +15,6 @@ interface FavoriteButtonProps {
   isAuthenticated: boolean;
   recipeTitle: string;
   refreshOnChange?: boolean;
-}
-
-interface FavoriteApiResponse {
-  recipeId: string;
-  isFavorite: boolean;
 }
 
 function joinClassNames(...classes: Array<string | undefined | false>): string {
@@ -48,17 +46,10 @@ export function FavoriteButton({
 
     try {
       const response = previousState
-        ? await axios.delete<FavoriteApiResponse>("/api/favorites", {
-            params: { recipeId },
-            withCredentials: true,
-          })
-        : await axios.post<FavoriteApiResponse>(
-            "/api/favorites",
-            { recipeId },
-            { withCredentials: true },
-          );
+        ? await removeFavorite(recipeId)
+        : await addFavorite(recipeId);
 
-      setIsFavorite(response.data.isFavorite);
+      setIsFavorite(response.isFavorite);
 
       if (refreshOnChange) {
         startTransition(() => {

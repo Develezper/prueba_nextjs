@@ -1,7 +1,6 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import axios from "axios";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
@@ -15,18 +14,11 @@ import {
 } from "@/src/components/ui/form";
 import { Input } from "@/src/components/ui/input";
 import { getApiErrorMessage } from "@/src/lib/api-error";
+import { login } from "@/src/services/auth-client.service";
 import {
   loginSchema,
   type LoginFormValues,
 } from "@/src/validations/auth.schema";
-
-interface LoginApiResponse {
-  user: {
-    id: string;
-    name: string;
-    email: string;
-  };
-}
 
 function getSafeRedirectPath(redirect: string | null): string {
   if (!redirect || !redirect.startsWith("/") || redirect.startsWith("//")) {
@@ -56,8 +48,9 @@ export function LoginForm() {
     setFormError(null);
 
     try {
-      await axios.post<LoginApiResponse>("/api/auth/login", values, {
-        withCredentials: true,
+      await login({
+        email: values.email,
+        password: values.password,
       });
 
       const redirectPath = getSafeRedirectPath(searchParams.get("redirect"));

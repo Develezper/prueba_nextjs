@@ -1,13 +1,5 @@
 import { v2 as cloudinary, type UploadApiResponse } from "cloudinary";
-
-export interface CloudinaryImageUploadResult {
-  publicId: string;
-  secureUrl: string;
-  width: number;
-  height: number;
-  format: string;
-  bytes: number;
-}
+import type { CloudinaryImageUploadResult } from "@/src/types/cloudinary";
 
 function getRequiredEnv(name: string): string {
   const value = process.env[name];

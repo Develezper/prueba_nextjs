@@ -1,16 +1,9 @@
 import { Types } from "mongoose";
 import { connectToDatabase } from "@/src/lib/mongodb";
 import Favorite from "@/src/models/Favorite";
-import {
-  getRecipesByIds,
-  recipeExistsById,
-  type RecipeDocument,
-} from "@/src/services/recipe.service";
-
-export interface FavoriteStatus {
-  recipeId: string;
-  isFavorite: boolean;
-}
+import { getRecipesByIds, recipeExistsById } from "@/src/services/recipe.service";
+import type { RecipeDocument } from "@/src/types/recipe";
+import type { FavoriteStatus } from "@/src/types/favorite";
 
 function toObjectId(id: string, fieldName: string): Types.ObjectId {
   if (!Types.ObjectId.isValid(id)) {

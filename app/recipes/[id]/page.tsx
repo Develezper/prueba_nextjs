@@ -1,10 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
-import { getRecipeById, type RecipeDocument } from "@/src/services/recipe.service";
+import { getRecipeById } from "@/src/services/recipe.service";
+import type { RecipeDocument, RecipeDifficulty } from "@/src/types/recipe";
 
 export const dynamic = "force-dynamic";
-
-type RecipeDifficulty = "Fácil" | "Media" | "Difícil";
 
 interface RecipeDetailPageProps {
   params: Promise<{

@@ -4,42 +4,15 @@ import { getJwtSecretKey } from "@/src/lib/auth-session";
 import { connectToDatabase } from "@/src/lib/mongodb";
 import { sendWelcomeEmail } from "@/src/lib/mailer";
 import User, { type UserDocument } from "@/src/models/User";
-
-export interface RegisterUserInput {
-  name: string;
-  email: string;
-  password: string;
-}
-
-export interface LoginUserInput {
-  email: string;
-  password: string;
-}
-
-export interface AuthUser {
-  id: string;
-  name: string;
-  email: string;
-}
-
-export interface RegisterUserResult {
-  user: AuthUser;
-}
-
-export interface LoginUserResult {
-  user: AuthUser;
-  token: string;
-}
-
-export interface SeedDefaultUserInput {
-  name: string;
-  email: string;
-  password: string;
-}
-
-export interface SeedDefaultUserResult {
-  user: AuthUser;
-}
+import type {
+  AuthUser,
+  LoginUserInput,
+  LoginUserResult,
+  RegisterUserInput,
+  RegisterUserResult,
+  SeedDefaultUserInput,
+  SeedDefaultUserResult,
+} from "@/src/types/auth";
 
 const passwordSaltRounds = 10;
 

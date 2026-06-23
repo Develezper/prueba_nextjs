@@ -1,15 +1,13 @@
-import axios from "axios";
-
-interface ApiErrorResponse {
-  message?: string;
-}
+import { getAxiosErrorMessage } from "@/src/lib/axios-error";
 
 export function getApiErrorMessage(
   error: unknown,
   fallbackMessage: string,
 ): string {
-  if (axios.isAxiosError<ApiErrorResponse>(error)) {
-    return error.response?.data?.message ?? fallbackMessage;
+  const axiosErrorMessage = getAxiosErrorMessage(error, fallbackMessage);
+
+  if (axiosErrorMessage) {
+    return axiosErrorMessage;
   }
 
   if (error instanceof Error) {

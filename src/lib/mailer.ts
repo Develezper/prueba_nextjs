@@ -1,12 +1,8 @@
 import nodemailer, { type Transporter } from "nodemailer";
+import type { WelcomeEmailInput } from "@/src/types/mailer";
 
 const gmailServiceName = "gmail";
 const appName = "App de Recetas";
-
-interface WelcomeEmailInput {
-  to: string;
-  name: string;
-}
 
 function getRequiredEnv(name: string): string {
   const value = process.env[name];

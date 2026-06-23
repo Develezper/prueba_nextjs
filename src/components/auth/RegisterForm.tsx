@@ -1,7 +1,6 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
@@ -15,18 +14,11 @@ import {
 } from "@/src/components/ui/form";
 import { Input } from "@/src/components/ui/input";
 import { getApiErrorMessage } from "@/src/lib/api-error";
+import { register } from "@/src/services/auth-client.service";
 import {
   registerFormSchema,
   type RegisterFormValues,
 } from "@/src/validations/auth.schema";
-
-interface RegisterApiResponse {
-  user: {
-    id: string;
-    name: string;
-    email: string;
-  };
-}
 
 export function RegisterForm() {
   const router = useRouter();
@@ -49,7 +41,7 @@ export function RegisterForm() {
     setFormError(null);
 
     try {
-      await axios.post<RegisterApiResponse>("/api/auth/register", {
+      await register({
         name: values.name,
         email: values.email,
         password: values.password,

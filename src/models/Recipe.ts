@@ -1,21 +1,7 @@
-import { model, models, Schema, type Model, type Types } from "mongoose";
+import { model, models, Schema, type Model } from "mongoose";
+import type { RecipeDocument } from "@/src/types/recipe";
 
 export const recipeCollectionName = "recipes";
-
-export type RecipeDifficulty = "Fácil" | "Media" | "Difícil";
-
-export interface RecipeDocument {
-  _id: Types.ObjectId;
-  title: string;
-  image: string;
-  prepTime: string;
-  difficulty: RecipeDifficulty;
-  servings: string;
-  ingredients: string[];
-  steps: string[];
-  createdAt?: Date;
-  updatedAt?: Date;
-}
 
 const recipeSchema = new Schema<RecipeDocument>(
   {

@@ -1,13 +1,8 @@
 import { jwtVerify, type JWTPayload } from "jose";
+import type { AuthSession } from "@/src/types/auth";
 
 export const authCookieName = "auth_token";
 export const authCookieMaxAge = 60 * 60 * 24 * 7;
-
-export interface AuthSession {
-  userId: string;
-  name: string;
-  email: string;
-}
 
 export function getJwtSecretKey(): Uint8Array {
   const secret = process.env.JWT_SECRET;

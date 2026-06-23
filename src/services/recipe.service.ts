@@ -1,21 +1,11 @@
 import { Types } from "mongoose";
 import { connectToDatabase } from "@/src/lib/mongodb";
-import Recipe, {
-  type RecipeDifficulty,
-  type RecipeDocument,
-} from "@/src/models/Recipe";
+import Recipe from "@/src/models/Recipe";
+import type { RecipeDocument } from "@/src/types/recipe";
+import type { RecipeSeedInput } from "@/src/types/recipe";
 
-export type { RecipeDocument } from "@/src/models/Recipe";
-
-export interface RecipeSeedInput {
-  title: string;
-  image: string;
-  prepTime: string;
-  difficulty: RecipeDifficulty;
-  servings: string;
-  ingredients: string[];
-  steps: string[];
-}
+export type { RecipeDocument } from "@/src/types/recipe";
+export type { RecipeSeedInput } from "@/src/types/recipe";
 
 export async function getRecipesCatalog(): Promise<RecipeDocument[]> {
   await connectToDatabase();

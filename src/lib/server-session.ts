@@ -1,9 +1,6 @@
 import { cookies } from "next/headers";
-import {
-  authCookieName,
-  type AuthSession,
-  verifyAuthToken,
-} from "@/src/lib/auth-session";
+import { authCookieName, verifyAuthToken } from "@/src/lib/auth-session";
+import type { AuthSession } from "@/src/types/auth";
 
 export async function getCurrentSession(): Promise<AuthSession | null> {
   const cookieStore = await cookies();

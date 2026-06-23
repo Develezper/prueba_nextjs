@@ -1,11 +1,11 @@
 "use client";
 
-import axios from "axios";
 import { LogOut } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { Button } from "@/src/components/ui/button";
 import { getApiErrorMessage } from "@/src/lib/api-error";
+import { logout } from "@/src/services/auth-client.service";
 
 export function LogoutButton() {
   const router = useRouter();
@@ -20,9 +20,7 @@ export function LogoutButton() {
     setIsSubmitting(true);
 
     try {
-      await axios.post("/api/auth/logout", null, {
-        withCredentials: true,
-      });
+      await logout();
 
       startTransition(() => {
         router.push("/login");

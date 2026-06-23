@@ -1,7 +1,5 @@
 import type { RecipeCardProps } from "@/src/components/RecipeCard";
-import type { RecipeDocument } from "@/src/services/recipe.service";
-
-type RecipeDifficulty = RecipeCardProps["difficulty"];
+import type { RecipeDocument, RecipeDifficulty } from "@/src/types/recipe";
 
 function getStringValue(value: unknown, fallback: string): string {
   return typeof value === "string" && value.trim().length > 0
