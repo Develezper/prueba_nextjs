@@ -1,0 +1,122 @@
+import { compare, hash } from "bcryptjs";
+import { SignJWT } from "jose";
+import { sendWelcomeEmail } from "@/src/lib/mailer";
+import User, { type UserDocument } from "@/src/models/User";
+
+export interface RegisterUserInput {
+  name: string;
+  email: string;
+  password: string;
+}
+
+export interface LoginUserInput {
+  email: string;
+  password: string;
+}
+
+export interface AuthUser {
+  id: string;
+  name: string;
+  email: string;
+}
+
+export interface RegisterUserResult {
+  user: AuthUser;
+}
+
+export interface LoginUserResult {
+  user: AuthUser;
+  token: string;
+}
+
+const passwordSaltRounds = 10;
+
+function normalizeEmail(email: string): string {
+  return email.trim().toLowerCase();
+}
+
+function getJwtSecret(): Uint8Array {
+  const secret = process.env.JWT_SECRET;
+
+  if (!secret) {
+    throw new Error("Missing required environment variable: JWT_SECRET");
+  }
+
+  return new TextEncoder().encode(secret);
+}
+
+function getJwtExpiration(): string {
+  return process.env.JWT_EXPIRES_IN ?? "7d";
+}
+
+function toAuthUser(user: UserDocument): AuthUser {
+  return {
+    id: user._id.toString(),
+    name: user.name,
+    email: user.email,
+  };
+}
+
+export async function registerUser({
+  name,
+  email,
+  password,
+}: RegisterUserInput): Promise<RegisterUserResult> {
+  const normalizedEmail = normalizeEmail(email);
+  const existingUser = await User.findOne({ email: normalizedEmail });
+
+  if (existingUser) {
+    throw new Error("Ya existe un usuario registrado con este email");
+  }
+
+  const hashedPassword = await hash(password, passwordSaltRounds);
+
+  const user = await User.create({
+    name: name.trim(),
+    email: normalizedEmail,
+    password: hashedPassword,
+  });
+
+  await sendWelcomeEmail({
+    to: user.email,
+    name: user.name,
+  });
+
+  return {
+    user: toAuthUser(user),
+  };
+}
+
+export async function loginUser({
+  email,
+  password,
+}: LoginUserInput): Promise<LoginUserResult> {
+  const normalizedEmail = normalizeEmail(email);
+  const user = await User.findOne({ email: normalizedEmail });
+
+  if (!user) {
+    throw new Error("Credenciales inválidas");
+  }
+
+  const isPasswordValid = await compare(password, user.password);
+
+  if (!isPasswordValid) {
+    throw new Error("Credenciales inválidas");
+  }
+
+  const authUser = toAuthUser(user);
+  const token = await new SignJWT({
+    userId: authUser.id,
+    email: authUser.email,
+    name: authUser.name,
+  })
+    .setProtectedHeader({ alg: "HS256" })
+    .setIssuedAt()
+    .setExpirationTime(getJwtExpiration())
+    .sign(getJwtSecret());
+
+  return {
+    user: authUser,
+    token,
+  };
+}
