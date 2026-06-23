@@ -100,5 +100,5 @@ bun run start
 
 ## Note
 
-Next.js 16 shows an informational warning indicating that the `middleware.ts` convention will be replaced by `proxy.ts` in future versions.
-`middleware.ts` is still supported today and is kept in this project to satisfy the JWT route protection requirement.
+Next.js 16 uses `proxy.ts` instead of the old `middleware.ts` convention.
+`proxy.ts` is kept in this project to satisfy the JWT route protection requirement.

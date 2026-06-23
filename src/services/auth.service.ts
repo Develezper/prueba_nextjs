@@ -59,19 +59,6 @@ function toAuthUser(user: UserDocument): AuthUser {
   };
 }
 
-async function removeRegisteredUser(userId: UserDocument["_id"]): Promise<void> {
-  await User.deleteOne({ _id: userId });
-}
-
-function getWelcomeEmailFailure(error: unknown): Error {
-  return new Error(
-    "No se pudo enviar el correo de bienvenida. Intenta registrarte de nuevo.",
-    {
-      cause: error,
-    },
-  );
-}
-
 export async function registerUser({
   name,
   email,
@@ -100,9 +87,8 @@ export async function registerUser({
       name: user.name,
     });
   } catch (error: unknown) {
-    // Roll back the user record if the welcome email fails to keep the sign-up flow consistent.
-    await removeRegisteredUser(user._id);
-    throw getWelcomeEmailFailure(error);
+    // El correo de bienvenida no debe bloquear el alta local o productiva.
+    console.warn("No se pudo enviar el correo de bienvenida", error);
   }
 
   return {

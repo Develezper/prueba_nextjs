@@ -31,7 +31,7 @@ export function RecipeCard({
       <div className="relative aspect-[4/3] overflow-hidden bg-slate-100">
         <Link
           href={recipeHref}
-          className="block h-full w-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-4"
+          className="relative block h-full w-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-4"
         >
           <Image
             src={image}
