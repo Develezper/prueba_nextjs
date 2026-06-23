@@ -6,6 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "seed:recipes": "bun run scripts/seed-recipes.ts",
     "lint": "eslint"
   },
   "dependencies": {
