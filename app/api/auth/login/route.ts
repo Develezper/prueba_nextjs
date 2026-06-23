@@ -40,9 +40,12 @@ export async function POST(request: Request) {
 
     return response;
   } catch (error: unknown) {
-    return NextResponse.json(
-      { message: getErrorMessage(error) },
-      { status: 401 },
-    );
+    const message = getErrorMessage(error);
+    const status =
+      error instanceof Error && error.message === "Credenciales inválidas"
+        ? 401
+        : 500;
+
+    return NextResponse.json({ message }, { status });
   }
 }
