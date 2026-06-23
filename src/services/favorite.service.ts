@@ -3,6 +3,7 @@ import { connectToDatabase } from "@/src/lib/mongodb";
 import Favorite from "@/src/models/Favorite";
 import {
   getRecipesByIds,
+  recipeExistsById,
   type RecipeDocument,
 } from "@/src/services/recipe.service";
 
@@ -27,6 +28,11 @@ export async function addFavorite(
 
   const userObjectId = toObjectId(userId, "Usuario");
   const recipeObjectId = toObjectId(recipeId, "Receta");
+  const recipeExists = await recipeExistsById(recipeId);
+
+  if (!recipeExists) {
+    throw new Error("La receta seleccionada no existe");
+  }
 
   await Favorite.updateOne(
     {

@@ -1,5 +1,10 @@
 import { z } from "zod";
 
+const objectIdSchema = z
+  .string()
+  .trim()
+  .regex(/^[a-f\d]{24}$/i, "Selecciona una receta válida");
+
 export const favoriteRecipeSchema = z.object({
-  recipeId: z.string().trim().min(1, "La receta es obligatoria"),
+  recipeId: objectIdSchema,
 });

@@ -22,6 +22,18 @@ export async function getRecipeById(
   return Recipe.findById(id).exec();
 }
 
+export async function recipeExistsById(id: string): Promise<boolean> {
+  if (!Types.ObjectId.isValid(id)) {
+    return false;
+  }
+
+  await connectToDatabase();
+
+  const recipe = await Recipe.exists({ _id: new Types.ObjectId(id) });
+
+  return Boolean(recipe);
+}
+
 export async function getRecipesByIds(ids: string[]): Promise<RecipeDocument[]> {
   const objectIds = ids
     .filter((id) => Types.ObjectId.isValid(id))

@@ -6,56 +6,67 @@ export type RecipeDifficulty = "Fácil" | "Media" | "Difícil";
 
 export interface RecipeDocument {
   _id: Types.ObjectId;
-  title?: string;
-  image?: string;
-  prepTime?: string;
-  difficulty?: RecipeDifficulty;
-  servings?: string;
-  ingredients?: string[];
-  steps?: string[];
+  title: string;
+  image: string;
+  prepTime: string;
+  difficulty: RecipeDifficulty;
+  servings: string;
+  ingredients: string[];
+  steps: string[];
   createdAt?: Date;
   updatedAt?: Date;
-  [key: string]: unknown;
 }
 
 const recipeSchema = new Schema<RecipeDocument>(
   {
     title: {
       type: String,
+      required: true,
       trim: true,
     },
     image: {
       type: String,
+      required: true,
       trim: true,
     },
     prepTime: {
       type: String,
+      required: true,
       trim: true,
     },
     difficulty: {
       type: String,
+      required: true,
       enum: ["Fácil", "Media", "Difícil"],
     },
     servings: {
       type: String,
+      required: true,
       trim: true,
     },
-    ingredients: [
-      {
-        type: String,
-        trim: true,
-      },
-    ],
-    steps: [
-      {
-        type: String,
-        trim: true,
-      },
-    ],
+    ingredients: {
+      type: [
+        {
+          type: String,
+          trim: true,
+        },
+      ],
+      required: true,
+      default: [],
+    },
+    steps: {
+      type: [
+        {
+          type: String,
+          trim: true,
+        },
+      ],
+      required: true,
+      default: [],
+    },
   },
   {
     collection: recipeCollectionName,
-    strict: false,
     timestamps: true,
     versionKey: false,
   },
