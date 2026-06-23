@@ -1,21 +1,13 @@
-import mongoose, { Types } from "mongoose";
+import { Types } from "mongoose";
 import { connectToDatabase } from "@/src/lib/mongodb";
+import Recipe, { type RecipeDocument } from "@/src/models/Recipe";
 
-export interface RecipeDocument {
-  _id: Types.ObjectId;
-  [key: string]: unknown;
-}
-
-const recipeCollectionName = "recipes";
-
-function getRecipeCollection() {
-  return mongoose.connection.collection<RecipeDocument>(recipeCollectionName);
-}
+export type { RecipeDocument } from "@/src/models/Recipe";
 
 export async function getRecipesCatalog(): Promise<RecipeDocument[]> {
   await connectToDatabase();
 
-  return getRecipeCollection().find({}).toArray();
+  return Recipe.find({}).exec();
 }
 
 export async function getRecipeById(
@@ -27,7 +19,7 @@ export async function getRecipeById(
 
   await connectToDatabase();
 
-  return getRecipeCollection().findOne({ _id: new Types.ObjectId(id) });
+  return Recipe.findById(id).exec();
 }
 
 export async function getRecipesByIds(ids: string[]): Promise<RecipeDocument[]> {
@@ -41,11 +33,9 @@ export async function getRecipesByIds(ids: string[]): Promise<RecipeDocument[]> 
 
   await connectToDatabase();
 
-  return getRecipeCollection()
-    .find({
-      _id: {
-        $in: objectIds,
-      },
-    })
-    .toArray();
+  return Recipe.find({
+    _id: {
+      $in: objectIds,
+    },
+  }).exec();
 }

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Suspense } from "react";
 import { LoginForm } from "@/src/components/auth/LoginForm";
 import { Card, CardContent, CardHeader, CardTitle } from "@/src/components/ui/card";
 
@@ -32,7 +33,9 @@ export default function LoginPage() {
             <CardTitle>Bienvenido de nuevo</CardTitle>
           </CardHeader>
           <CardContent>
-            <LoginForm />
+            <Suspense fallback={null}>
+              <LoginForm />
+            </Suspense>
             <p className="mt-6 text-center text-sm text-slate-600">
               ¿No tienes cuenta?{" "}
               <Link

@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { Button } from "@/src/components/ui/button";
@@ -28,8 +28,17 @@ interface LoginApiResponse {
   };
 }
 
+function getSafeRedirectPath(redirect: string | null): string {
+  if (!redirect || !redirect.startsWith("/") || redirect.startsWith("//")) {
+    return "/";
+  }
+
+  return redirect;
+}
+
 export function LoginForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [formError, setFormError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
 
@@ -51,8 +60,10 @@ export function LoginForm() {
         withCredentials: true,
       });
 
+      const redirectPath = getSafeRedirectPath(searchParams.get("redirect"));
+
       startTransition(() => {
-        router.push("/");
+        router.push(redirectPath);
         router.refresh();
       });
     } catch (error: unknown) {
