@@ -1,12 +1,9 @@
 import Link from "next/link";
-import { cookies } from "next/headers";
 import { LogoutButton } from "@/src/components/auth/LogoutButton";
-import { authCookieName, verifyAuthToken } from "@/src/lib/auth-session";
+import { getCurrentSession } from "@/src/lib/server-session";
 
 export async function Navbar() {
-  const cookieStore = await cookies();
-  const token = cookieStore.get(authCookieName)?.value;
-  const session = token ? await verifyAuthToken(token) : null;
+  const session = await getCurrentSession();
 
   return (
     <header className="sticky top-0 z-40 border-b border-slate-200 bg-white/95 backdrop-blur">

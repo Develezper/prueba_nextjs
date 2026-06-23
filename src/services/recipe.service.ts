@@ -1,4 +1,5 @@
 import mongoose, { Types } from "mongoose";
+import { connectToDatabase } from "@/src/lib/mongodb";
 
 export interface RecipeDocument {
   _id: Types.ObjectId;
@@ -12,6 +13,8 @@ function getRecipeCollection() {
 }
 
 export async function getRecipesCatalog(): Promise<RecipeDocument[]> {
+  await connectToDatabase();
+
   return getRecipeCollection().find({}).toArray();
 }
 
@@ -22,5 +25,27 @@ export async function getRecipeById(
     return null;
   }
 
+  await connectToDatabase();
+
   return getRecipeCollection().findOne({ _id: new Types.ObjectId(id) });
+}
+
+export async function getRecipesByIds(ids: string[]): Promise<RecipeDocument[]> {
+  const objectIds = ids
+    .filter((id) => Types.ObjectId.isValid(id))
+    .map((id) => new Types.ObjectId(id));
+
+  if (objectIds.length === 0) {
+    return [];
+  }
+
+  await connectToDatabase();
+
+  return getRecipeCollection()
+    .find({
+      _id: {
+        $in: objectIds,
+      },
+    })
+    .toArray();
 }
