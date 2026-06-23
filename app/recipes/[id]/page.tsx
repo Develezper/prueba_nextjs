@@ -49,7 +49,7 @@ function getStringArray(value: unknown): string[] {
 
 function toRecipeDetail(recipe: RecipeDocument): RecipeDetail {
   return {
-    image: getStringValue(recipe.image, "/window.svg"),
+    image: getStringValue(recipe.image, "/recipe-placeholder.svg"),
     title: getStringValue(recipe.title, "Receta sin título"),
     prepTime: getStringValue(recipe.prepTime, "Tiempo no disponible"),
     difficulty: getDifficulty(recipe.difficulty),

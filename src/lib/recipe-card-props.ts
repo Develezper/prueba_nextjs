@@ -20,7 +20,7 @@ function getDifficulty(value: unknown): RecipeDifficulty {
 export function toRecipeCardProps(recipe: RecipeDocument): RecipeCardProps {
   return {
     recipeId: recipe._id.toString(),
-    image: getStringValue(recipe.image, "/window.svg"),
+    image: getStringValue(recipe.image, "/recipe-placeholder.svg"),
     title: getStringValue(recipe.title, "Receta sin título"),
     prepTime: getStringValue(recipe.prepTime, "Tiempo no disponible"),
     difficulty: getDifficulty(recipe.difficulty),
