@@ -5,6 +5,7 @@ Recipes App is a Next.js App Router project built for a performance technical te
 ## Live Deployment
 
 - Production URL: https://prueba-nextjs-ten.vercel.app/
+- GitHub repository: [Develezper/prueba_nextjs](https://github.com/Develezper/prueba_nextjs)
 
 ## Requirements
 
