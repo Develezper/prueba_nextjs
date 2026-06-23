@@ -53,6 +53,7 @@ const defaultUser = {
 async function main(): Promise<void> {
   applyBunBsonFallback();
 
+  // Recreate the same demo account every time so testers can log in immediately.
   const result = await seedDefaultUser(defaultUser);
 
   console.log(

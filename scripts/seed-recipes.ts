@@ -47,6 +47,7 @@ function applyBunBsonFallback(): void {
 const cloudinaryFoodBaseUrl = "https://res.cloudinary.com/demo/image/upload";
 
 function cloudinaryFoodImage(publicId: string): string {
+  // Use Cloudinary demo assets so the seed stays self-contained for reviewers.
   return `${cloudinaryFoodBaseUrl}/c_fill,w_1200,h_900,q_auto,f_auto/${publicId}`;
 }
 
