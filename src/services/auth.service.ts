@@ -1,5 +1,6 @@
 import { compare, hash } from "bcryptjs";
 import { SignJWT } from "jose";
+import { connectToDatabase } from "@/src/lib/mongodb";
 import { sendWelcomeEmail } from "@/src/lib/mailer";
 import User, { type UserDocument } from "@/src/models/User";
 
@@ -62,6 +63,8 @@ export async function registerUser({
   email,
   password,
 }: RegisterUserInput): Promise<RegisterUserResult> {
+  await connectToDatabase();
+
   const normalizedEmail = normalizeEmail(email);
   const existingUser = await User.findOne({ email: normalizedEmail });
 
@@ -91,6 +94,8 @@ export async function loginUser({
   email,
   password,
 }: LoginUserInput): Promise<LoginUserResult> {
+  await connectToDatabase();
+
   const normalizedEmail = normalizeEmail(email);
   const user = await User.findOne({ email: normalizedEmail });
 
