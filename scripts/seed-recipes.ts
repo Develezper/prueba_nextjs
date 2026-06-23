@@ -33,6 +33,7 @@ function applyBunBsonFallback(): void {
       return builtinModule;
     }
 
+    // Bun's snapshot detection can interfere with BSON during seeding, so we force it off here.
     return {
       ...builtinModule,
       startupSnapshot: {

@@ -31,6 +31,16 @@ export interface LoginUserResult {
   token: string;
 }
 
+export interface SeedDefaultUserInput {
+  name: string;
+  email: string;
+  password: string;
+}
+
+export interface SeedDefaultUserResult {
+  user: AuthUser;
+}
+
 const passwordSaltRounds = 10;
 
 function normalizeEmail(email: string): string {
@@ -90,6 +100,7 @@ export async function registerUser({
       name: user.name,
     });
   } catch (error: unknown) {
+    // Roll back the user record if the welcome email fails to keep the sign-up flow consistent.
     await removeRegisteredUser(user._id);
     throw getWelcomeEmailFailure(error);
   }
@@ -132,5 +143,41 @@ export async function loginUser({
   return {
     user: authUser,
     token,
+  };
+}
+
+export async function seedDefaultUser({
+  name,
+  email,
+  password,
+}: SeedDefaultUserInput): Promise<SeedDefaultUserResult> {
+  await connectToDatabase();
+
+  const normalizedEmail = normalizeEmail(email);
+  const hashedPassword = await hash(password, passwordSaltRounds);
+
+  // Upsert keeps the demo account idempotent so the seed can be run multiple times safely.
+  const user = await User.findOneAndUpdate(
+    { email: normalizedEmail },
+    {
+      $set: {
+        name: name.trim(),
+        email: normalizedEmail,
+        password: hashedPassword,
+      },
+    },
+    {
+      new: true,
+      upsert: true,
+      setDefaultsOnInsert: true,
+    },
+  );
+
+  if (!user) {
+    throw new Error("No se pudo crear el usuario de prueba");
+  }
+
+  return {
+    user: toAuthUser(user),
   };
 }

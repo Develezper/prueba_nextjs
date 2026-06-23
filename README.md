@@ -1,55 +1,104 @@
-# App de Recetas
+# Recipes App
 
-Aplicación web de recetas construida con Next.js App Router, TypeScript, MongoDB con Mongoose, Tailwind CSS, componentes base estilo Shadcn UI, Lucide React, React Hook Form, Zod, JWT con `jose`, `bcryptjs` y Nodemailer.
+Recipes App is a Next.js App Router project built for a performance technical test. It uses TypeScript, MongoDB with Mongoose, Tailwind CSS, Shadcn UI-style base components, Lucide React, React Hook Form, Zod, JWT with `jose`, `bcryptjs`, and Nodemailer.
 
-## Requisitos
+## Live Deployment
+
+- Production URL: https://prueba-nextjs-ten.vercel.app/
+
+## Requirements
 
 - Bun
 - MongoDB
-- Cuenta de Gmail con App Password para el correo de bienvenida
-- Cuenta de Cloudinary si se usa la API de subida de imágenes
+- Gmail account with an App Password for the welcome email
+- Cloudinary account if you want to use the image upload API
 
-## Configuración
+## Setup
 
-Instala dependencias con Bun:
+Install dependencies:
 
 ```bash
 bun install
 ```
 
-Crea el archivo local de variables de entorno tomando como referencia `.env.example`.
+Create your local environment file from `.env.example`.
+
+## Environment Variables
+
+```bash
+# MongoDB
+MONGODB_URI=
+
+# JWT
+JWT_SECRET=
+JWT_EXPIRES_IN=
+
+# Gmail / Nodemailer
+GMAIL_USER=
+GMAIL_APP_PASSWORD=
+
+# Cloudinary
+CLOUDINARY_CLOUD_NAME=
+CLOUDINARY_API_KEY=
+CLOUDINARY_API_SECRET=
+CLOUDINARY_UPLOAD_FOLDER=
+```
+
+## Seed Data
+
+Load the demo recipes into the database:
+
+```bash
+bun run seed:recipes
+```
+
+Create or refresh the default demo user:
+
+```bash
+bun run seed:user
+```
+
+Default demo credentials:
+
+- Email: `demo@prueba-nextjs.com`
+- Password: `DemoUser123!`
 
 ## Scripts
 
-Ejecutar el servidor de desarrollo:
+Start the development server:
 
 ```bash
 bun run dev
 ```
 
-Ejecutar lint:
+Run lint:
 
 ```bash
 bun run lint
 ```
 
-Generar build de producción:
+Build for production:
 
 ```bash
 bun run build
 ```
 
-Levantar el build:
+Start the production build:
 
 ```bash
 bun run start
 ```
 
-## Estructura Principal
+## Project Structure
 
-- `app/`: rutas, páginas y route handlers de Next.js App Router.
-- `src/components/`: componentes reutilizables de UI y formularios.
-- `src/lib/`: utilidades compartidas de MongoDB, sesión, correo y errores.
-- `src/models/`: modelos de Mongoose.
-- `src/services/`: capa de servicios para acceso a base de datos.
-- `src/validations/`: esquemas de validación con Zod.
+- `app/`: routes, pages, and route handlers for the Next.js App Router.
+- `src/components/`: reusable UI and form components.
+- `src/lib/`: shared utilities for MongoDB, session, email, and error handling.
+- `src/models/`: Mongoose models.
+- `src/services/`: database access layer.
+- `src/validations/`: Zod validation schemas.
+
+## Note
+
+Next.js 16 shows an informational warning indicating that the `middleware.ts` convention will be replaced by `proxy.ts` in future versions.
+`middleware.ts` is still supported today and is kept in this project to satisfy the JWT route protection requirement.

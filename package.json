@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "seed:recipes": "bun run scripts/seed-recipes.ts",
+    "seed:user": "bun run scripts/seed-default-user.ts",
     "lint": "eslint"
   },
   "dependencies": {
