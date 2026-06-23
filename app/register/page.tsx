@@ -1,8 +1,16 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { RegisterForm } from "@/src/components/auth/RegisterForm";
 import { Card, CardContent, CardHeader, CardTitle } from "@/src/components/ui/card";
+import { getCurrentSession } from "@/src/lib/server-session";
 
-export default function RegisterPage() {
+export default async function RegisterPage() {
+  const session = await getCurrentSession();
+
+  if (session) {
+    redirect("/");
+  }
+
   return (
     <main className="min-h-screen bg-slate-50 px-6 py-10 text-slate-950">
       <section className="mx-auto grid min-h-[calc(100vh-5rem)] w-full max-w-5xl items-center gap-8 lg:grid-cols-[minmax(0,0.9fr)_minmax(360px,0.55fr)]">
