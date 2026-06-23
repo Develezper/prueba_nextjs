@@ -1,11 +1,9 @@
 import { NextResponse } from "next/server";
+import { authCookieMaxAge, authCookieName } from "@/src/lib/auth-session";
 import { loginUser } from "@/src/services/auth.service";
 import { loginSchema } from "@/src/validations/auth.schema";
 
 export const runtime = "nodejs";
-
-const authCookieName = "auth_token";
-const authCookieMaxAge = 60 * 60 * 24 * 7;
 
 function getErrorMessage(error: unknown): string {
   return error instanceof Error ? error.message : "No se pudo iniciar sesión";

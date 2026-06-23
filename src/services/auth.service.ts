@@ -1,5 +1,6 @@
 import { compare, hash } from "bcryptjs";
 import { SignJWT } from "jose";
+import { getJwtSecretKey } from "@/src/lib/auth-session";
 import { connectToDatabase } from "@/src/lib/mongodb";
 import { sendWelcomeEmail } from "@/src/lib/mailer";
 import User, { type UserDocument } from "@/src/models/User";
@@ -34,16 +35,6 @@ const passwordSaltRounds = 10;
 
 function normalizeEmail(email: string): string {
   return email.trim().toLowerCase();
-}
-
-function getJwtSecret(): Uint8Array {
-  const secret = process.env.JWT_SECRET;
-
-  if (!secret) {
-    throw new Error("Missing required environment variable: JWT_SECRET");
-  }
-
-  return new TextEncoder().encode(secret);
 }
 
 function getJwtExpiration(): string {
@@ -118,7 +109,7 @@ export async function loginUser({
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
     .setExpirationTime(getJwtExpiration())
-    .sign(getJwtSecret());
+    .sign(getJwtSecretKey());
 
   return {
     user: authUser,
