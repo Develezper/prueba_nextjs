@@ -1,5 +1,8 @@
 import nodemailer, { type Transporter } from "nodemailer";
 
+const gmailServiceName = "gmail";
+const appName = "App de Recetas";
+
 interface WelcomeEmailInput {
   to: string;
   name: string;
@@ -15,28 +18,16 @@ function getRequiredEnv(name: string): string {
   return value;
 }
 
-function getSmtpPort(): number {
-  const port = Number(getRequiredEnv("SMTP_PORT"));
-
-  if (!Number.isInteger(port) || port <= 0) {
-    throw new Error("SMTP_PORT must be a positive integer");
-  }
-
-  return port;
-}
-
-function getSmtpSecure(): boolean {
-  return process.env.SMTP_SECURE === "true";
+function getGmailUser(): string {
+  return getRequiredEnv("GMAIL_USER");
 }
 
 function createTransporter(): Transporter {
   return nodemailer.createTransport({
-    host: getRequiredEnv("SMTP_HOST"),
-    port: getSmtpPort(),
-    secure: getSmtpSecure(),
+    service: gmailServiceName,
     auth: {
-      user: getRequiredEnv("SMTP_USER"),
-      pass: getRequiredEnv("SMTP_PASS"),
+      user: getGmailUser(),
+      pass: getRequiredEnv("GMAIL_APP_PASSWORD"),
     },
   });
 }
@@ -46,7 +37,7 @@ export async function sendWelcomeEmail({
   name,
 }: WelcomeEmailInput): Promise<void> {
   const transporter = createTransporter();
-  const from = getRequiredEnv("SMTP_FROM");
+  const from = `${appName} <${getGmailUser()}>`;
 
   await transporter.sendMail({
     from,
